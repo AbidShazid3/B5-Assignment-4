@@ -1,17 +1,52 @@
 import BorrowForm from "@/components/module/BorrowBookForm/BorrowForm";
 import EditBookForm from "@/components/module/EditBookForm/EditBookForm";
 import { Button } from "@/components/ui/button";
+import { useDeleteBookMutation } from "@/redux/api/baseApi";
 import type { IBook } from "@/types/types";
 import { Link } from "react-router";
+import Swal from "sweetalert2";
 
 
-const GridBooks = ({ book }: {book: IBook}) => {
+const GridBooks = ({ book }: { book: IBook }) => {
+
+    const [deleteBook] = useDeleteBookMutation();
+    
+        const handleDeleteBook = async (id: string) => {
+            const result = await Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+            });
+    
+            if (result.isConfirmed) {
+                try {
+                    await deleteBook(id).unwrap();
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "The book has been deleted.",
+                        icon: "success",
+                    });
+                } catch (error) {
+                    console.log(error);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong while deleting the book.",
+                        icon: "error",
+                    });
+                }
+            }
+        };
+    
     return (
         <div className="w-full bg-white rounded-lg shadow-lg">
 
             <div className="flex items-center justify-between px-4 py-4 bg-gray-900/70 rounded-t-lg">
                 <EditBookForm book={book}></EditBookForm>
-                <Button size={"sm"} variant={"outline"} className="text-red-500 cursor-pointer">Delete</Button>
+                <Button onClick={() => handleDeleteBook(book._id)} size={"sm"} variant={"outline"} className="text-red-500 cursor-pointer">Delete</Button>
                 <BorrowForm book={book}></BorrowForm>
             </div>
 

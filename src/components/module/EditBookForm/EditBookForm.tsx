@@ -42,6 +42,7 @@ const EditBookForm = ({ book }: { book: IBook }) => {
             await updateBook({ id: book._id, ...data }).unwrap()
             setOpen(false);
             form.reset();
+            toast.success("Book Updated Successfully")
         } catch (error) {
             console.log(error);
             toast.error("Failed to update")
