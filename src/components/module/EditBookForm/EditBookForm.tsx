@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useUpdateBookMutation } from "@/redux/api/baseApi";
 import type { IBook } from "@/types/types";
@@ -95,12 +96,25 @@ const EditBookForm = ({ book }: { book: IBook }) => {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Genre</FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
+                                                <Select value={field.value} onValueChange={field.onChange}>
+                                                    <FormControl>
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="Select a genre" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        <SelectItem value="FICTION">FICTION</SelectItem>
+                                                        <SelectItem value="NON_FICTION">NON_FICTION</SelectItem>
+                                                        <SelectItem value="SCIENCE">SCIENCE</SelectItem>
+                                                        <SelectItem value="HISTORY">HISTORY</SelectItem>
+                                                        <SelectItem value="BIOGRAPHY">BIOGRAPHY</SelectItem>
+                                                        <SelectItem value="FANTASY">FANTASY</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
                                             </FormItem>
                                         )}
                                     />
+
                                     <FormField
                                         control={form.control}
                                         name="isbn"
